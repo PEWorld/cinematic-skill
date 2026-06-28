@@ -1,6 +1,6 @@
 ---
 name: cinema-prompt
-description: Генерирует промпты для динамичного промо-ролика одежды по фото шмотки. Вход — изображение вещи (куртка, штаны, аксессуар, луки) ± бренд/настроение. Выход — констелляция из 6 кадров одного мира с готовыми Midjourney + Kling промптами в эстетике «снято, не отрендерено» (гранж-сити, жёсткий флэш, низкий угол, телесная агрессия) — НЕ глянцевая каталожная съёмка. Use this skill whenever the user uploads/links a clothing item or full look and asks for promo video ideas, lookbook scenes, brand campaign frames, Kling prompts, MJ prompts, или просит сцены / раскадровку / промо ролик / клип под одежду. Skill is pushy — trigger on ANY garment image with intent to make video content, even if the user не говорит «Kling» или «промпт».
+description: Генерирует промпты для динамичного промо-ролика одежды по фото шмотки + описанию бренда. Вход — изображение вещи (куртка, штаны, аксессуар, луки) ± brand-DNA (своя марка / референс-бренды / mood). Скилл сам триангулирует «шмотка × бренд → мир» через brand-archetype matrix (16 архетипов: dark streetwear / techwear / western / goth / couture-avant / sportcore / heritage / pastoral / cyber / biker / hip-hop / bohemian / Y2K / domestic-soft / mountaincore / skater) и подбирает локацию из 9 семейств миров (city-grit · nature-grit · sacred-decay · industrial-isolated · subculture-sport · domestic-intimate · liminal-dreamcore · historic-decay · cultural-specific · climate-extreme). Выход — констелляция из 6 кадров одного мира с готовыми Midjourney + Kling промптами в эстетике «снято, не отрендерено» — НЕ глянцевая каталожная съёмка. Use this skill whenever the user uploads/links a clothing item or full look and asks for promo video ideas, lookbook scenes, brand campaign frames, Kling prompts, MJ prompts, или просит сцены / раскадровку / промо ролик / клип под одежду. Skill is pushy — trigger on ANY garment image with intent to make video content, even if the user не говорит «Kling» или «промпт».
 ---
 
 # /cinema-prompt — Промпт-генератор fashion-промо (gritty city, not glossy studio)
@@ -117,45 +117,196 @@ GARMENT LOCK (copy verbatim into every shot):
 ### Принцип: shape × world
 | Силуэт шмотки | Идёт с миром |
 |---|---|
-| **Floor-sweeping / wide-leg / oversized** | HK rooftop wet concrete · Tokyo neon alley · underpass с лужами · grimy parking deck — нужен пол + перспектива для silhouette |
-| **Chain/metal/heavy hardware** | Бетонные high-rise каньоны · кирпичные fire-escape лестницы · ржавая warehouse · roof under storm — твёрдые поверхности |
-| **All-over print / loud deco** | Paris Haussmann (architecture как фон) · Tokyo arcade · plaza на закате · marble metro — нужен «нейтральный богатый фон» чтобы принт читался |
-| **Y2K puffer / fur / techwear** | Холодный cool day · бэк-аллея · sub-zero parking · gas station ночью — нужна температура и сырость |
-| **Mesh / cropped / тело наружу** | Низкий угол под high-rise · rooftop при флэше · neon-lit залив — нужна вертикаль + флэш |
-| **Patch / DIY / distressed** | Vacant lot · skate park · railway tracks · трэшовые back yards — нужна культура потёртости |
+| **Floor-sweeping / wide-leg / oversized** | HK rooftop wet concrete · Tokyo neon alley · underpass с лужами · grimy parking deck · ruined cathedral nave · salt flats — нужен пол + перспектива для silhouette |
+| **Chain/metal/heavy hardware** | Бетонные high-rise каньоны · кирпичные fire-escape лестницы · ржавая warehouse · scrapyard · oil rig · ship graveyard — твёрдые поверхности |
+| **All-over print / loud deco** | Paris Haussmann · Tokyo arcade · plaza на закате · marble metro · empty palace ballroom · опера в распаде — нужен «нейтральный богатый фон» чтобы принт читался |
+| **Y2K puffer / fur / techwear** | Холодный cool day · бэк-аллея · sub-zero parking · gas station ночью · alpine ski lift · frozen lake · ice cave — нужна температура и сырость |
+| **Mesh / cropped / тело наружу** | Низкий угол под high-rise · rooftop при флэше · neon-lit залив · boxing gym · jungle clearing после ливня — нужна вертикаль + флэш |
+| **Patch / DIY / distressed** | Vacant lot · skate park · railway tracks · трэшовые back yards · abandoned waterpark · scrapyard · trailer park — нужна культура потёртости |
+| **Leather / biker / utility** | Desert highway shoulder · biker bar parking · MX dirt pit · oil-stained garage · Mojave gas station — нужна жара, грязь, мотоиконика |
+| **Silk / drape / flowing / sheer** | Black-sand beach · empty marble palace · abandoned pool · misty pine forest · mountain treeline at dawn · ruined chapel — нужна ткань-в-ветре, негатив-простор |
+| **Tactical / cargo / military / techwear-utility** | Concrete bunker · abandoned factory floor · quarry · radar station · soviet sanatorium · helipad on rooftop — нужна функциональная геометрия |
+| **Western / fringe / suede / hat** | Big-sky plains · Texas honky-tonk · gravel rodeo lot · dirt road с telephone poles · cornfield at dusk · highway diner — нужна horizon + dust |
+| **Knit / cosy / earth-tone / heritage** | Misty pine forest · rocky atlantic coast · fishing village dock · stone cottage interior · sheep pasture at golden hour — нужна natural fibre context |
+| **Couture-avant / sculptural / architectural** | Brutalist civic plaza · empty opera foyer · ruined Roman bath · industrial wind tunnel · salt flats · obsidian volcanic field — нужен monumental space |
+| **Streetwear-clean / sportcore / mall-core** | Empty mall after-hours · 24h laundromat · arcade · bowling alley · public pool deck · highway truck stop — нужна Americana-liminal |
+| **Goth / occult / heavy black** | Catacombs · cemetery at dusk · ruined monastery · candle-lit chapel decay · stormy moor · black lake at full moon — нужна sacred-decay |
+| **Beach / swim / minimal** | Black-sand volcanic beach · tropical storm coast · cliff-side rocks · ruined coastal hotel · jellyfish-lit night surf — НЕ stock-beach, всегда грит-coast |
+| **Ethnic-fusion / global-craft / kaftan** | Moroccan medina alley · Mongolian steppe yurt · Vietnamese rice paddy at dawn · Lagos market · Cuzco stone street — нужна real cultural texture, не «travel ad» |
 
-### Меню миров по умолчанию (если пользователь не задал)
+### Меню миров — РАСШИРЕННОЕ (если пользователь не задал — выбирать через brand-matrix ниже)
 
-Все имеют **реальную фактуру + sub-cultural читаемость + grit:**
+Все имеют **реальную фактуру + sub-cultural читаемость + grit**. Сгруппировано по семействам — внутри каждого 5–10 конкретных локаций. **НЕ использовать стоково** — каждая локация снимается грязно, с практическим светом, low-angle.
 
-- **HK dystopia** — Choi Hung / Mong Kok каньоны, мокрый бетон, неон на кантонском, low-angle на high-rise (твоя домашняя сцена, дефолт под ORISS/ERROR SYSTEM)
-- **Tokyo back-alley / Shibuya night** — узкие izakaya-проулки, vending machines, fluo на красном кирпиче, дождь
-- **Paris streetwear crew** — Haussmann фасады, late afternoon long shadow, кафе-террасы, метро Pere Lachaise grit
-- **NYC subway / Brooklyn rooftop** — graffiti tunnels, J/M/Z elevated tracks, summer rooftop золотой час
+#### 🏙️ CITY-GRIT (дефолт под dark streetwear / ORISS / Y2K / hip-hop)
+- **HK dystopia** — Choi Hung / Mong Kok каньоны, мокрый бетон, неон на кантонском, low-angle на high-rise · дефолт под ORISS/ERROR SYSTEM
+- **Tokyo back-alley / Shibuya night** — izakaya проулки, vending machines, fluo на красном кирпиче, дождь
+- **Paris streetwear crew** — Haussmann фасады, late afternoon long shadow, кафе-террасы, метро Père Lachaise grit
+- **NYC subway / Brooklyn rooftop** — graffiti tunnels, J/M/Z elevated tracks, rooftop под молнией
 - **Berlin techno / industrial** — бетонные U-Bahn платформы, Spree quays, S-Bahn под дождём, kebab counters
-- **Sao Paulo / Rio favela edge** — concrete stairs, motorbike on cobblestone, kite-strung sky
+- **Seoul backstreet** — neon kanji vertical signs, wet ground, cigarette smoke, basement noraebang
+- **São Paulo / Rio favela edge** — concrete stairs, motorbike on cobblestone, kite-strung sky
 - **LA Eastside / Boyle Heights** — palm tree shadow, blue-tile diner, motel parking, neon liquor sign
-- **Post-apocalypse highway** — пыль, грозовое небо, ржавые отбойники, фары встречки в дыму
 - **Y2K Japan low-fi suburb** — concrete stairs, vending corridor, train crossing, residential brick (флэш + cool day)
-- **Korean basement nightclub / Seoul backstreet** — neon kanji vertical signs, wet ground, cigarette smoke
-- **Underground parking garage / multi-storey** — fluo strip, sodium spill, concrete columns, ramp lines
-- **Abandoned mall / liminal interior** — broken escalator, dust motes, dead fountain (для cropped/clean минимализма)
-- **Cyber-monk / temple decay** — incense smoke, stone wall, torn shrine, candle pools
+
+#### 🌲 NATURE-GRIT (НЕ инстаграм-пейзаж — всегда weather + grit + одинокая фигура)
+- **Misty pine forest** — moss, fallen trunks, fog crawling through trees, single shaft of cold light
+- **Mountain treeline at dawn** — alpine wind, exposed rock, low cloud rolling, lone figure on ridge
+- **Stormy moor / Scottish highland** — wet heather, no trees, sideways rain, dramatic flat overcast
+- **Black-sand volcanic beach** (Iceland / Bali Lovina) — обsidian sand, white surf, lone basalt stack, storm light
+- **Tropical storm coast** — palm trees in horizontal wind, sideways rain, sodium streetlamp на pier
+- **Rocky atlantic coast** — cliffs, gulls, fishing nets, salt spray, lighthouse silhouette
+- **Cornfield at dusk** (Midwest) — backlit stalks, low warm sun, telephone wires, gravel road
+- **Mojave / Joshua Tree** — yucca silhouettes, lavender dusk, lone gas station, dust devils
+- **Salt flats / desert playa** — endless white, cracked surface, single figure, blown-out sky
+- **Jungle clearing after rain** — wet leaves, mist, root system, exposed mud, dappled cold light
+- **Mongolian steppe** — yurt, livestock, big sky, dust, horseman silhouette
+- **Frozen lake / glacier** — cracked ice, blue-black water below, lone figure, breath visible
+- **Mangrove / swamp** — knee-deep water, knee roots, dragonflies, single fishing boat, hot diffuse haze
+
+#### 🛐 SACRED-DECAY (для goth / dark avant / occult / heritage)
+- **Ruined chapel / abandoned monastery** — broken stained glass, candle pools, pigeon shit, stone arches
+- **Catacombs / ossuary** — bones-as-architecture, single candle, narrow stone corridor
+- **Cemetery at dusk** — wrought iron, ivy, broken angel statues, ground fog
+- **Ruined Roman bath** — empty pool, marble cracked, vines, single shaft of light through hole in roof
+- **Empty Orthodox church** (Балканы / Грузия) — frescoes peeling, incense smoke, single old woman in black far back
+- **Cyber-monk temple** — torn paper sutras, candle pools, stone wall, smoke
+- **Witch's hut interior** — herbs hanging, fire glow, animal skulls, kerosene lamp
+
+#### 🏭 INDUSTRIAL-ISOLATED (для tactical / techwear / heavy hardware / military)
+- **Concrete bunker** — fluorescent strip, water on floor, single pipe drip, echo
+- **Abandoned factory floor** — rust beams, shafts of light through broken roof, machinery skeletons
+- **Quarry** — terraced rock, yellow excavator, dust haze, vertigo wide
+- **Scrapyard / car graveyard** — stacked crushed cars, golden hour rust, dog barking somewhere
+- **Oil rig / offshore platform** — orange paint, ocean fog, helipad, single worker in coverall
+- **Soviet sanatorium / abandoned spa** — peeling pastel walls, empty pool tiles, broken chandelier
+- **Radar station / abandoned military** — dish, barbed wire, concrete bunker, salt wind
+- **Power plant cooling tower** — concrete giant, fog inside, vertigo up
+
+#### 🥊 SUBCULTURE-SPORT (для leather / utility / patch / athletic)
+- **Boxing gym** (Brooklyn / Havana) — sweat-stained ring, single bulb, peeling posters, tape-wrapped hands
+- **Motocross dirt pit** — dust haze, RV in background, helmet on tire, fans on chain-link
+- **BMX dirt jump** — wooden ramps, summer dust, kid silhouette mid-air
+- **Skate park concrete bowl** — graffiti, busted board, sodium light, kid pushing
+- **Equestrian stable / horse barn** — hay, leather tack, single bulb, breath in cold air
+- **Motorcycle garage** — chrome parts on workbench, oil-stained concrete, single bike up on lift
+- **Lowrider meet** — chrome hydraulics, gold-flake paint, fenced-off parking lot at golden hour
+- **Drag strip / illegal street race** — heat shimmer, tire smoke, headlights at vanishing point
+- **Underground rave / warehouse party** — laser, fog, strobe, sweat, crushed cans
+
+#### 🛏️ DOMESTIC-INTIMATE (для cropped / silk / sleepwear / soft-grunge)
+- **Cheap motel room at 3am** — sodium street light through curtains, tube TV glow, unmade bed
+- **Bathroom tile / shower stall** — fluorescent overhead, condensation, single bulb, tile reflection
+- **Kitchen at dawn** — kettle steam, single window light, cigarette in ashtray, peeling lino
+- **Bedroom with curtains blowing** — single bedside lamp, white curtain in night wind
+- **Empty hotel corridor** — endless carpet pattern, fluorescent flicker, one open door spilling light
+- **Suburban garage** — single bare bulb, beer fridge, dartboard, motorcycle covered with tarp
+- **Diner booth 2am** — fluorescent, formica, single coffee, neon spilling through window
+
+#### 🎢 LIMINAL / DREAMCORE (для clean / minimal / sportcore / Y2K-revival)
+- **Abandoned waterpark** — drained slides, kid-toy bright colors faded, weeds through tiles
+- **Empty mall after-hours** — escalator off, single security light, fountain dry, mannequins
+- **24h laundromat** — fluorescent, single washer spinning, plastic chairs, beige tile
+- **Bowling alley** — neon scoreboard, ball returns clinking, brown carpet, beer signs
+- **Public pool deck (off-season)** — drained pool, fall leaves on tiles, single lifeguard chair
+- **Highway truck stop / gas station** (3am) — fluorescent canopy, single semi truck, moths on lights
+- **Arcade after-hours** — single CRT glow, cigarette haze, sticky carpet, faded poster
+- **Abandoned shopping plaza** — empty parking lot, vacant store signs, weeds через bins
+
+#### 🏛️ HISTORIC-DECAY / COUTURE-SETTING (для silk / drape / sculptural / avant)
+- **Empty palace ballroom** — chandelier with broken crystals, parquet warped, dust motes
+- **Ruined opera foyer** — marble staircase, peeling murals, single chandelier on floor
+- **Brutalist civic plaza** — Béton brut, concrete benches, single figure, raking light
+- **Decommissioned theatre** — red velvet seats faded, stage dark, single bulb upstage
+- **Stately decay (Versailles-tier in ruin)** — gilt mirror cracked, parquet flooded, weeds через окно
+- **Old library / archive** — dust on books, single green lamp, leather chair, brass
+
+#### 🌍 CULTURAL-SPECIFIC (для ethnic-fusion / craft-heritage / global)
+- **Moroccan medina** — narrow blue alley, brass lanterns, single tagine smoke
+- **Tokyo onsen town** — wooden buildings, lantern light on wet stone, sake bottles
+- **Hong Kong fishing village** (Tai O) — stilt houses, dried fish on lines, sampan, low tide mud
+- **Mexico City rooftop** — water tanks, telenovela aerial, golden hour pollution
+- **Cuban Havana street** — peeling pastel walls, 1950s car, laundry overhead, single old man
+- **Vietnamese rice paddy at dawn** — conical hats, water buffalo, mist on water
+- **Indian palace courtyard in decay** — marble, jaali screens, monkeys, single saffron robe
+- **Lagos market** — fabric stalls, motorbike taxi, plastic crates, harmattan dust
+- **Tbilisi old quarter** — wooden balconies, peeling paint, stray dogs, wine pour
+
+#### ❄️ CLIMATE-EXTREME (для technical / outerwear / utility)
+- **Alpine ski lift fog** — gondola swinging in white-out, frost on cable
+- **Frozen quarry** — ice cracked, blue-black water below, single figure
+- **Sub-zero gas station** — frost on pumps, breath visible, single bulb halo
+- **Sandstorm desert** — visibility 5 meters, headlights, lone tower
+- **Volcanic crater rim** — sulfur steam, basalt, lone figure против wind
+- **Equatorial monsoon** — sideways rain on banana leaves, mud road, conical hat
 
 ### Анти-меню (НЕ использовать)
-- Студия / seamless / cyclorama
-- «Beach sunset» / «desert dunes» / «mountain peak» (туристский постер)
-- Дома богачей / Dubai marina / yacht / sports car interior (luxury → реклама → скролл)
-- Forest path / lake reflection / cherry blossom (instagram aesthetic)
+- Студия / seamless / cyclorama / cyc / soft beauty key
+- Чистый «Beach sunset» / «desert dunes with no detail» / «mountain peak» как открытка — туристский постер. (Можно делать desert/beach/mountain ТОЛЬКО с грязью, погодой, фигурой, low-angle — см. NATURE-GRIT.)
+- Luxury-ad: Dubai marina · yacht · sports car interior · penthouse infinity pool · champagne magnum
+- Instagram aesthetic: cherry blossom path · lavender field · pastel cafe · pink desert · «aesthetic» café latte art
+- Generic fantasy: эльфы · киберпанк-город из стока · cosplay-зал · zombie apocalypse костюм
+
+---
+
+## 🎭 BRAND ARCHETYPE — автоопределение мира (КРИТИЧНО)
+
+Если пользователь даёт описание бренда / референсы / соц-сеть / тэглайн — **сначала декодируй brand archetype**, потом подбирай мир. Это важнее, чем silhouette: один и тот же oversized puffer в брендах Patagonia и Vetements живёт в разных мирах.
+
+### Шаг: BRAND DNA decoder
+Если пользователь упоминает бренд (свой или референс), запиши:
+- **Tribe:** (dark streetwear · technical-outdoor · clean minimal · western-americana · couture-avant · sportcore · goth-occult · heritage-craft · global-fusion · y2k-revival · cyber-dystopia · bohemian · biker-punk)
+- **Decade DNA:** (Y2K 99–04 · early-10s Tumblr · late-10s techwear · 70s biker · 90s grunge · 80s power · timeless folk)
+- **Reference brands:** (с чем визуально рифмуется — Rick Owens · Vetements · A-COLD-WALL · Vaquera · Eckhaus Latta · Maison Margiela · Yohji · Acne · Heliot Emil · Diesel · Bode · Jacquemus · Carhartt WIP · Patagonia · Stüssy · Supreme · Telfar · Mowalola · Bianca Saunders · Marine Serre · Iris van Herpen)
+- **Mood word:** одна одна фраза (например `«хтонический ритуал»` / `«урбан-выживание»` / `«гранж-нежность»` / `«фарм-делирий»`)
+
+### Brand archetype → world matrix (дефолтный матч)
+
+| Brand archetype | Reference brands | Primary worlds (top 3) | Fallback worlds |
+|---|---|---|---|
+| **Dark streetwear / dystopia** | Rick Owens, A-COLD-WALL, Heliot Emil, ERROR SYSTEM, ORISS, Diesel new-era | HK dystopia · Tokyo back-alley · industrial-bunker | rooftop storm · brutalist plaza |
+| **Y2K revival / techno-frutiger** | Heaven by Marc Jacobs, Vaquera, Diesel, KNWLS, MISBHV | Y2K Japan suburb · abandoned mall · arcade after-hours · bowling alley | gas station 3am · Tokyo neon |
+| **Technical outdoor / mountaincore** | Arc'teryx, Patagonia, Salomon, Klättermusen, Snow Peak | Mountain treeline · alpine ski lift · frozen lake · volcanic crater | misty pine forest · stormy moor |
+| **Western / Americana** | RRL, Bode (western), Stetson, Junya x Levi's, Levi's vintage | Cornfield at dusk · big-sky plains · Mojave · honky-tonk parking · highway diner | lowrider meet · scrapyard |
+| **Goth / occult / dark avant** | Rick Owens, Ann Demeulemeester, Comme des Garçons noir, Yohji black, Boris Bidjan Saberi | Ruined chapel · catacombs · cemetery dusk · stormy moor | empty Orthodox church · witch hut |
+| **Couture-avant / sculptural** | Iris van Herpen, Maison Margiela artisanal, Schiaparelli, Vaquera, Mugler | Empty palace ballroom · ruined opera foyer · salt flats · brutalist plaza · volcanic field | abandoned spa · decommissioned theatre |
+| **Tactical / techwear / military** | ACRONYM, Stone Island Shadow Project, Veilance, Errolson, GUERRILLA-GROUP | Concrete bunker · radar station · oil rig · quarry · soviet sanatorium | rooftop helipad · power plant |
+| **Heritage-craft / earth-tone / quiet luxury** | Lemaire, The Row, Auralee, Toogood, Margaret Howell, Studio Nicholson | Rocky atlantic coast · fishing village dock · misty pine forest · stone cottage · sheep pasture | empty library · old archive |
+| **Sportcore / clean / mall-core** | Telfar, Martine Rose (sport), adidas SPZL, Nike ACG, Stüssy clean | Public pool deck · 24h laundromat · empty mall · bowling alley · highway truck stop | arcade · diner booth |
+| **Biker / leather / punk** | Schott NYC, Enfants Riches Déprimés, Junya Watanabe MAN biker, 99%IS | Biker bar parking · motorcycle garage · desert highway · drag strip · scrapyard | underground rave · trailer park |
+| **Hip-hop / streetwear-crew** | Supreme, BAPE, ANTI SOCIAL SOCIAL CLUB, Corteiz, Stüssy, Aimé Leon Dore | NYC subway · Brooklyn rooftop · Paris crew · LA Eastside · São Paulo edge | basketball court · arcade |
+| **Bohemian / kaftan / global-craft** | Marine Serre, Bode, Story mfg, Chloé, Ulla Johnson | Moroccan medina · Mongolian steppe · Vietnamese rice paddy · Cuban Havana · Indian palace decay | Lagos market · Tbilisi old town |
+| **Domestic-soft / intimate / nightwear-as-day** | Eckhaus Latta, Vaquera, Sandy Liang, Cecilie Bahnsen, Simone Rocha | Motel room 3am · kitchen at dawn · bedroom curtains · bathroom tile · hotel corridor | suburban garage · diner booth |
+| **Cyber-dystopia / sci-fi futurism** | Mugler, Balenciaga (Demna era), Diesel, Coperni, AVAVAV | Underground parking · helipad rooftop · neon HK · radar station · power plant | airport at night · abandoned subway |
+| **Skater / DIY-distressed / patch-grunge** | Cactus Plant Flea Market, ERL, Online Ceramics, Brain Dead, Section 8 | Skate park · vacant lot · trailer park · abandoned waterpark · railway tracks | suburban garage · backyard |
+| **Pastoral / folk / heritage-revival** | Bode, Story mfg, Toogood, Margaret Howell, Cawley | Sheep pasture · misty pine forest · fishing village · stone cottage · cornfield dawn | stable barn · old library |
+
+### Правило triangulation (КАК ВЫБИРАТЬ)
+Когда есть фото шмотки + описание бренда:
+1. **Brand archetype matrix** даёт 3 primary мира.
+2. **Shape × world таблица** даёт 3 мира под силуэт.
+3. **Пересечение** = твой выбор. Если пересечения нет — приоритет у brand archetype (потому что мир должен сказать «это [бренд]», а не «это [одежда вообще]»).
+4. Если 2–3 кандидата примерно равны — выдай пользователю буквами, дай выбрать:
+   ```
+   А — <мир 1, одна строка обоснования>
+   Б — <мир 2, одна строка обоснования>
+   В — <мир 3, одна строка обоснования>
+   ```
+
+### Когда brand НЕ задан
+- Если у вещи **сильный visual hook** (chain-mesh / all-over print / fur / cargo) → выбирай по shape × world матрице, выдай 2–3 варианта на выбор.
+- Если вещь **нейтральная** (basic tee / plain pants / hoodie) → СПРОСИ мир/бренд/настроение. Без контекста выйдет generic.
+- **Дефолт-дефолт под безымянного русскоязычного юзера**: city-grit (HK / Tokyo / Paris), потому что это база скилла. Но всегда лучше спросить.
 
 ---
 
 ## Слой 1 — От шмотки к идее (процесс)
 
 1. **GARMENT DNA** — разбери фото (см. блок выше).
-2. **Match world** — по таблице shape×world выбери 2–3 кандидата-мира. Если пользователь задал мир — взять его.
-3. **Choose one world** — отбери тот, который сильнее всего работает с visual hook вещи.
-4. **Develop 6 shots constellation** — внутри мира сгенерируй 10+ потенциальных кадров (см. распределение ниже), отбери 6 сильнейших через тесты.
+2. **BRAND DNA** — если бренд/референс упомянут, декодируй (см. brand decoder). Если нет — спроси или возьми city-grit дефолт.
+3. **Match world** — triangulation через brand archetype matrix + shape × world таблицу. Выдай 2–3 кандидата на выбор, если нет очевидного.
+4. **Choose one world** — отбери тот, который сильнее всего рифмуется и с brand, и с visual hook вещи.
+5. **Develop 6 shots constellation** — внутри мира сгенерируй 10+ потенциальных кадров (см. распределение ниже), отбери 6 сильнейших через тесты.
 
 ---
 
@@ -252,12 +403,24 @@ Establishing мира — но **с фигурой внутри**, не пуст
 | **Bodycam / GoPro POV** | Action, погоня, urban movement | `bodycam fisheye POV, motion blur, overexposed blown highlights, shaky, low-res snapshot` |
 | **PS3-era FMV / videogame still** | Post-apoc, грозовое небо, FF-mood | `early-2010s videogame cutscene still, soft compression artifacts, low dynamic range, grungy color grade, washed-out blues` |
 | **Phone snapshot, overcast day** | Y2K Japan, candid alley, документалка | `blurry phone camera still, flat overcast daylight, washed cool color, blown-out white sky, accidental framing` |
+| **Polaroid SX-70 / instant** | Domestic-intimate, motel, kitchen, soft-grunge | `Polaroid SX-70 instant photo, lifted highlights, soft milky shadows, warm cast, faded border edge, slight chemical bloom` |
+| **Medium format 6x6 film** | Couture-avant, sculptural, opera foyer, palace decay | `6x6 medium format film still, fine grain, square frame, natural color, deep blacks, slight halation` |
+| **Concert pit / paparazzi tele** | Crew / sport / underground rave | `paparazzi telephoto 200mm grab, motion blur, shallow focus, harsh on-camera flash from afar, compressed background` |
+| **Wildlife trail-cam / IR** | Forest / desert / industrial isolated | `trail camera infrared still, monochrome night vision, timestamp burn, motion-triggered flash, harsh frontal` |
+| **Hi8 home video** | Y2K nostalgia / pastoral / domestic | `Hi8 home video still, interlacing artifacts, oversaturated color, date stamp burn, lens dust, low resolution` |
+| **35mm slide film (Kodachrome)** | Pastoral / heritage / western / cultural | `Kodachrome 35mm slide still, saturated warm reds, deep blue sky, sharp grain, vintage editorial feel WITHOUT being editorial` |
 
-### Grade
-- **Cool steel + warm practical** (HK/Tokyo дефолт): `cool teal-leaning steel base, deep crushed shadows, one warm sodium/neon highlight, no soft fill`
-- **Washed cool overcast** (Y2K, Berlin): `flat cool overcast grade, desaturated, no warmth, blown white sky`
-- **Low warm sun + deep shadow** (Paris, LA): `low-angle warm directional sun raking subject, hard deep crushed shadow on opposite side, no fill`
-- **Stormy diffuse + lightning** (post-apoc, FF): `stormy diffuse grey light, soft-edged lightning flashes, wet desaturated palette`
+### Grade (выбрать ОДИН под мир)
+- **Cool steel + warm practical** (HK / Tokyo / cyber-dystopia / underground parking): `cool teal-leaning steel base, deep crushed shadows, one warm sodium/neon highlight, no soft fill`
+- **Washed cool overcast** (Y2K Japan / Berlin / mall liminal / stormy moor): `flat cool overcast grade, desaturated, no warmth, blown white sky`
+- **Low warm sun + deep shadow** (Paris / LA / cornfield / Mojave / cultural-specific): `low-angle warm directional sun raking subject, hard deep crushed shadow on opposite side, no fill`
+- **Stormy diffuse + lightning** (post-apoc / mountain ridge / coast / oil rig): `stormy diffuse grey light, soft-edged lightning flashes, wet desaturated palette`
+- **Candle / single bulb interior** (sacred-decay / motel / kitchen-3am / catacombs / witch hut): `single warm tungsten bulb / candle pool, surrounding swallowed in deep black, halation on flame, no fill`
+- **Earth-tone overcast** (nature-grit / heritage-craft / pastoral / fishing village / pine forest): `muted earth grade, brown-green palette, soft flat diffused daylight, fog in mid-ground, no saturated colors`
+- **Bleached desert midday** (salt flats / Mojave / volcanic field / cornfield noon): `harsh overexposed white sun, bleached colors, deep black under-shadow, heat haze, no atmosphere`
+- **Frost-blue alpine** (frozen lake / ski lift / sub-zero / glacier): `cold blue-white grade, visible breath, frost halation, no warmth at all, single low warm sun if any`
+- **Snow / white-out** (sandstorm / snowstorm / fog): `white-on-white near monochrome, low visibility, single dark figure as only contrast, desaturated to near grey`
+- **Tropical green-wet** (jungle / rice paddy / mangrove / monsoon): `humid green-leaning grade, wet leaves catching highlights, soft haze, no harsh sun`
 
 ⚠️ Тёплое = **точечный практический источник** (одна лампа, неон, фара, низкое солнце), НЕ «golden hour magic light». Запрещены: `amber light, golden hour, warm glow, beautiful light, dramatic light, cinematic light` без конкретного источника.
 
@@ -476,20 +639,29 @@ soft beauty light, model headshot, smiling model, posed, catalog, seamless backg
 
 ## Поведение скилла
 
-### Если на входе фото шмотки (главный кейс)
-1. Разбери **GARMENT DNA** (визуально).
-2. Спроси, если не очевидно: **мир/настроение** (HK / Paris / Y2K Japan / post-apoc / на твой выбор).
-3. Match world по shape × world (если не задан — предложи 2–3, дай выбрать буквой).
-4. Сгенерируй **полную россыпь из 6 кадров** по формату выше.
+### Если на входе фото шмотки + описание бренда (ИДЕАЛЬНЫЙ КЕЙС)
+1. **GARMENT DNA** — разбери фото.
+2. **BRAND DNA** — декодируй бренд: tribe / decade / reference brands / mood word.
+3. **Triangulation:** brand archetype matrix → 3 миров, shape × world → 3 миров. Пересечение = твой выбор. Если очевидно — выдавай. Если нет — покажи 2–3 на выбор буквой с одной строкой обоснования.
+4. **Один мир выбран** → сгенерируй россыпь из 6 кадров.
 
-### Если на входе фото шмотки + явный мир
-Пропусти шаг 2–3, сразу россыпь.
+### Если на входе только фото шмотки (без бренда)
+1. **GARMENT DNA**.
+2. **Спроси бренд / мир / настроение** одной фразой («Это под какую марку или вайб? Если своя — опиши одной строкой: тёмный стрит / технический outdoor / Y2K / western / готик / sportcore / heritage-craft»).
+   - Если пользователь говорит «выбери сам» — иди по shape × world матрице, выдай 2–3 на выбор.
+3. Дальше как в идеальном кейсе.
+
+### Если на входе фото шмотки + явный мир / явная локация
+Пропусти triangulation, сразу к шагу 4 (россыпь). BRAND DNA всё равно полезно декодировать чтобы tone попасть точнее.
 
 ### Если на входе только описание / текст без фото
 Спроси фото или хотя бы детальное описание вещи. **Без garment DNA скилл не работает** — выдаст generic стрит-сцены без зацепа.
 
 ### Если на входе несколько фото луков
 Возьми ОДИН look как hero (или спроси какой), остальные = вариации в Кадре 4 (CREW) как комплементарные униформы мира.
+
+### Если на входе фото лукбука / съёмки (не сток шмотки)
+Извлеки GARMENT DNA из того, что носит модель, BRAND DNA из эстетики съёмки. Дальше как идеальный кейс.
 
 ---
 
@@ -502,11 +674,14 @@ soft beauty light, model headshot, smiling model, posed, catalog, seamless backg
 - [ ] **Ноль студии / seamless / catalog framing**
 - [ ] Negative prompt с анти-глянец + анти-fashion-editorial терминами
 
-**Garment lock:**
+**Garment + Brand:**
 - [ ] GARMENT DNA разобран и записан
 - [ ] GARMENT LOCK формула одинакова во всех 6 промптах
 - [ ] **Шмотка полноценно видна минимум в 4 из 6 кадров**
 - [ ] `--cref <url шмотки> --cw 100` указан в Workflow
+- [ ] **BRAND DNA декодирован** (tribe / decade / reference brands / mood word) — или явно спрошено если не задано
+- [ ] **Triangulation выполнен**: brand archetype matrix × shape × world → выбранный мир обоснован одной строкой
+- [ ] Если 2–3 мира равны — выданы буквами на выбор, не выбрано вслепую
 
 **Россыпь:**
 - [ ] **6 РАЗНЫХ кадров одного мира — НЕ 6 ракурсов одной позы**
